@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  dev-db:
+    image: postgres:17
+    ports: 
+      - 5434:5432
+    environment: 
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: course-craft
+    networks: 
+      - course-craft-test
+  
+  test-deb:
+    image: postgres:17
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: course-craft-test
+    networks:
+      - course-craft-test
+
+networks:
+  course-craft-test:
