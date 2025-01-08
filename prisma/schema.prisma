@@ -14,67 +14,88 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
-  username String
-  email    String @unique
+  username  String
+  email     String    @unique
+  password  String
+  role      String
 
-  password String
-  role     String
+  orders    Order[]
+  reviews   Review[]
+  downloads Download[]
 }
 
 model DataCategory {
-  id          Int    @id @default(autoincrement())
-  name        String @unique
-  description String @unique
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String
+
+  dataItems   DataItem[]
 }
 
 model DataItem {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   categoryId  Int
   title       String
   description String
   price       Int
   fileUrl     String
+
+  category    DataCategory @relation(fields: [categoryId], references: [id])
+  orders      Order[]
+  reviews     Review[]
+  downloads   Download[]
 }
 
 model Order {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   userId     Int
   dataItemId Int
-  orderDate  DateTime
+  orderDate  DateTime   @default(now())
   amount     Int
   status     String
+
+  user       User       @relation(fields: [userId], references: [id])
+  dataItem   DataItem   @relation(fields: [dataItemId], references: [id])
+  payment    Payment?
 }
 
 model Review {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   dataItemId Int
   userId     Int
-  rating     Int
+  rating     Int       
   comment    String
-  createdAt  DateTime
+  createdAt  DateTime  @default(now())
+
+  user       User      @relation(fields: [userId], references: [id])
+  dataItem   DataItem  @relation(fields: [dataItemId], references: [id])
 }
 
 model Payment {
   id            Int      @id @default(autoincrement())
-  orderId       Int
-  userId        Int
+  orderId       Int      @unique
   amount        Int
-  paymentDate   DateTime
+  paymentDate   DateTime @default(now())
   paymentMethod String
   status        String
+
+  order         Order    @relation(fields: [orderId], references: [id])
 }
 
 model Download {
-  id            Int      @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   userId        Int
   dataItemId    Int
-  downloadDate  DateTime
-  downloadCount Int
+  downloadDate  DateTime   @default(now())
+  downloadCount Int        @default(1)
+
+  user          User       @relation(fields: [userId], references: [id])
+  dataItem      DataItem   @relation(fields: [dataItemId], references: [id])
 }
