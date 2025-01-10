@@ -32,7 +32,7 @@ export class AuthService {
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new Error('Credentials already taken');
+          throw new ForbiddenException('Credentials already taken');
         }
       }
       throw error;
