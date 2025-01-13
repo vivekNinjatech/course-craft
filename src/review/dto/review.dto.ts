@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString, Max, Min, min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, Max, Min } from 'class-validator';
 export class CreateReviewDto {
   @IsNotEmpty()
   @IsNumber()
@@ -16,5 +16,33 @@ export class CreateReviewDto {
 
   @IsNotEmpty()
   @IsString()
-  comment: string;  
+  comment: string;
+}
+
+export class GetReviewsByDataItemIdDto {
+  @IsNotEmpty()
+  @IsNumber()
+  dataItemId: number;
+}
+
+export class GetReviewDto {
+  @IsNotEmpty()
+  @IsNumber()
+  reviewId: number;
+}
+
+export class DeleteReviewDto {
+  @IsNotEmpty()
+  @IsNumber()
+  reviewId: number;
+}
+
+export class UpdateReviewDto {
+  @IsNotEmpty()
+  @IsNumber()
+  rating: number;
+
+  @IsNotEmpty()
+  @IsString()
+  comment: string;
 }

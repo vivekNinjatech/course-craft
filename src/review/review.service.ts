@@ -1,28 +1,90 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateReviewDto } from './dto/review.dto';
+import {
+  CreateReviewDto,
+  GetReviewsByDataItemIdDto,
+  GetReviewDto,
+  UpdateReviewDto,
+} from './dto';
 
 @Injectable()
 export class ReviewService {
   constructor(private prisma: PrismaService) {}
 
-  // make a review
   async createReview(dto: CreateReviewDto) {
-    const review = await this.prisma.review.create(
-      {
+    try {
+      const review = await this.prisma.review.create({
         data: {
           dataItemId: dto.dataItemId,
           userId: dto.userId,
           rating: dto.rating,
           comment: dto.comment,
         },
-      }
-    )
+      });
+
+      return review;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  // get all reviews
+  async getReviewsByDataItemId(dto: GetReviewsByDataItemIdDto) {
+    return await this.prisma.review.findMany({
+      where: {
+        dataItemId: dto.dataItemId,
+      },
+    });
+  }
 
-  // get single review
+  async getReview(dto: GetReviewDto) {
+    return await this.prisma.review.findFirst({
+      where: {
+        id: dto.reviewId,
+      },
+    });
+  }
 
-  // delete review
+  async deleteReview(reviewId: number) {
+    try {
+      const review = await this.prisma.review.findFirst({
+        where: {
+          id: reviewId,
+        },
+      });
+      if (!review) {
+        throw new ForbiddenException('Review not found');
+      }
+      return this.prisma.review.delete({
+        where: {
+          id: reviewId,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateReview(reviewId: number, dto: UpdateReviewDto) {
+    try {
+      const review = await this.prisma.review.findFirst({
+        where: {
+          id: reviewId,
+        },
+      });
+      if (!review) {
+        throw new ForbiddenException('Review not found');
+      }
+      return this.prisma.review.update({
+        where: {
+          id: reviewId,
+        },
+        data: {
+          rating: dto.rating,
+          comment: dto.comment,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
