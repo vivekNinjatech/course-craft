@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateReviewDto,
   GetReviewsByDataItemIdDto,
@@ -64,11 +64,11 @@ export class ReviewService {
     }
   }
 
-  async updateReview(reviewId: number, dto: UpdateReviewDto) {
+  async updateReview(dto: UpdateReviewDto) {
     try {
       const review = await this.prisma.review.findFirst({
         where: {
-          id: reviewId,
+          id: dto.reviewId,
         },
       });
       if (!review) {
@@ -76,7 +76,7 @@ export class ReviewService {
       }
       return this.prisma.review.update({
         where: {
-          id: reviewId,
+          id: dto.reviewId,
         },
         data: {
           rating: dto.rating,

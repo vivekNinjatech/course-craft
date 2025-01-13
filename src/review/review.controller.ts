@@ -1,10 +1,20 @@
-import { Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ReviewService } from './review.service';
 import {
   CreateReviewDto,
   DeleteReviewDto,
   GetReviewDto,
   GetReviewsByDataItemIdDto,
+  UpdateReviewDto,
 } from './dto';
 
 @Controller('review')
@@ -30,8 +40,14 @@ export class ReviewController {
   }
 
   @HttpCode(200)
-  @Get('delete/:reviewId')
+  @Delete('delete/:reviewId')
   async deleteReview(@Param('reviewId') dto: DeleteReviewDto) {
     return this.reviewService.deleteReview(dto.reviewId);
+  }
+
+  @HttpCode(200)
+  @Patch('update/:reviewId')
+  async updateReview(@Param('reviewId') @Body() dto: UpdateReviewDto) {
+    return this.reviewService.updateReview(dto);
   }
 }
