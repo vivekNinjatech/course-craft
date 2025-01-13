@@ -39,7 +39,7 @@ export class ReviewController {
     return this.reviewService.getReview(dto);
   }
 
-  @HttpCode(200)
+  @HttpCode(204)
   @Delete('delete/:reviewId')
   async deleteReview(@Param('reviewId') dto: DeleteReviewDto) {
     return this.reviewService.deleteReview(dto.reviewId);

@@ -181,74 +181,72 @@ describe('AppController (e2e)', () => {
       //     .expectStatus(200);
       // });
 
-    //   it('should throw error if reviewId is empty', () => {
-    //     return pactum.spec().delete(`/review/get-review/`).expectStatus(400);
-    //   });
+      //   it('should throw error if reviewId is empty', () => {
+      //     return pactum.spec().delete(`/review/get-review/`).expectStatus(400);
+      //   });
 
-    //   it('should throw error if reviewId is empty', () => {
-    //     return pactum
-    //       .spec()
-    //       .delete(`/review/delete/`)
-    //       .withBody({ rating: 5, comment: 'test' })
-    //       .expectStatus(400);
-    //   });
+      //   it('should throw error if reviewId is empty', () => {
+      //     return pactum
+      //       .spec()
+      //       .delete(`/review/delete/`)
+      //       .withBody({ rating: 5, comment: 'test' })
+      //       .expectStatus(400);
+      //   });
 
-    //   it('should delete review', () => {
-    //     return pactum
-    //       .spec()
-    //       .delete(`/review/delete/1`)
-    //       .withHeaders({
-    //         Authorization: 'Bearer $S{userAt}',
-    //       })
-    //       .withBody({ rating: 5, comment: 'test' })
-    //       .expectStatus(200);
-    //   });
+      //   it('should delete review', () => {
+      //     return pactum
+      //       .spec()
+      //       .delete(`/review/delete/1`)
+      //       .withHeaders({
+      //         Authorization: 'Bearer $S{userAt}',
+      //       })
+      //       .withBody({ rating: 5, comment: 'test' })
+      //       .expectStatus(200);
+      //   });
 
-    //   it('should throw error if reviewId is empty', () => {
-    //     return pactum
-    //       .spec()
-    //       .patch(`/review/update/`)
-    //       .withHeaders({
-    //         Authorization: 'Bearer $S{userAt}',
-    //       })
-    //       .withBody({ rating: 5, comment: 'test' })
-    //       .expectStatus(400);
-    //   });
+      //   it('should throw error if reviewId is empty', () => {
+      //     return pactum
+      //       .spec()
+      //       .patch(`/review/update/`)
+      //       .withHeaders({
+      //         Authorization: 'Bearer $S{userAt}',
+      //       })
+      //       .withBody({ rating: 5, comment: 'test' })
+      //       .expectStatus(400);
+      //   });
 
-    //   it('should throw error if rating is empty', () => {
-    //     return pactum
-    //       .spec()
-    //       .patch(`/review/update/1`)
-    //       .withHeaders({
-    //         Authorization: 'Bearer $S{userAt}',
-    //       })
-    //       .withBody({ comment: 'test' })
-    //       .expectStatus(400);
-    //   });
+      //   it('should throw error if rating is empty', () => {
+      //     return pactum
+      //       .spec()
+      //       .patch(`/review/update/1`)
+      //       .withHeaders({
+      //         Authorization: 'Bearer $S{userAt}',
+      //       })
+      //       .withBody({ comment: 'test' })
+      //       .expectStatus(400);
+      //   });
 
-    //   it('should throw if comment is empty', () => {
-    //     return pactum
-    //       .spec()
-    //       .patch(`/review/update/1`)
-    //       .withHeaders({
-    //         Authorization: 'Bearer $S{userAt}',
-    //       })
-    //       .withBody({ rating: 5 })
-    //       .expectStatus(400);
-    //   });
+      //   it('should throw if comment is empty', () => {
+      //     return pactum
+      //       .spec()
+      //       .patch(`/review/update/1`)
+      //       .withHeaders({
+      //         Authorization: 'Bearer $S{userAt}',
+      //       })
+      //       .withBody({ rating: 5 })
+      //       .expectStatus(400);
+      //   });
 
-    //   it('should update review', () => {
-    //     return pactum
-    //       .spec()
-    //       .patch(`/review/update/1`)
-    //       .withHeaders({
-    //         Authorization: 'Bearer $S{userAt}',
-    //       })
-    //       .withBody({ rating: 5, comment: 'test' })
-    //       .expectStatus(200);
-    //   });
-
-    
+      //   it('should update review', () => {
+      //     return pactum
+      //       .spec()
+      //       .patch(`/review/update/1`)
+      //       .withHeaders({
+      //         Authorization: 'Bearer $S{userAt}',
+      //       })
+      //       .withBody({ rating: 5, comment: 'test' })
+      //       .expectStatus(200);
+      //   });
     });
   });
 });
