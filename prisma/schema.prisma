@@ -94,8 +94,8 @@ model Download {
   id            Int       @id @default(autoincrement())
   userId        Int
   dataItemId    Int
-  downloadDate  DateTime   @default(now())
-  downloadCount Int        @default(1)
+  lastDownloadDate  DateTime   @default(now())
+  downloadCount Int        @default(0)
 
   user          User       @relation(fields: [userId], references: [id])
   dataItem      DataItem   @relation(fields: [dataItemId], references: [id])

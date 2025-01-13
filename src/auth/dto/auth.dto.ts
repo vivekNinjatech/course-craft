@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { AuthRole } from '../types';
+import { AuthRole } from '../type';
 
 export class SignUpDto {
   @IsEmail()

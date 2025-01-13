@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto, SignUpDto } from './dto';
 import * as argon from 'argon2';
-import { AuthRole } from './types';
+import { AuthRole } from './type';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
 

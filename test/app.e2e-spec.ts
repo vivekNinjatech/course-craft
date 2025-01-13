@@ -4,7 +4,7 @@ import * as pactum from 'pactum';
 import { AppModule } from './../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { SignUpDto } from '../src/auth/dto';
-import { AuthRole } from '../src/auth/types';
+import { AuthRole } from '../src/auth/type';
 import { UpdateUserDataDto } from 'src/user/dto';
 
 describe('AppController (e2e)', () => {
