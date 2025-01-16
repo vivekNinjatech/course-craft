@@ -4,6 +4,7 @@ import {
   CreateOrderDto,
   GetAllUserOrdersDto,
   GetOrderDto,
+  GetOrdersByQueryDto,
   UpdateOrderStatusDto,
 } from './dto';
 
@@ -65,6 +66,30 @@ export class OrderService {
         },
       });
       return order;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllOrders() {
+    try {
+      const orders = await this.prisma.order.findMany();
+      return orders;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getOrdersByQuery(query: GetOrdersByQueryDto) {
+    try {
+      const orders = await this.prisma.order.findMany({
+        where: {
+          orderId: {
+            contains: query.query,
+          },
+        },
+      });
+      return orders;
     } catch (error) {
       throw error;
     }

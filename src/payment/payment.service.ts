@@ -40,4 +40,16 @@ export class PaymentService {
       },
     });
   }
+
+  async getPaymentByOrderId(orderId: number) {
+    return this.prisma.payment.findFirst({
+      where: {
+        orderId,
+      },
+    });
+  }
+
+  async getPayments() {
+    return this.prisma.payment.findMany();
+  }
 }

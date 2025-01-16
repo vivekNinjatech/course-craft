@@ -87,4 +87,12 @@ export class ReviewService {
       throw error;
     }
   }
+
+  async getUserReviews(userId: number) {
+    return await this.prisma.review.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+  }
 }

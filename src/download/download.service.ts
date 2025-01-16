@@ -2,7 +2,8 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateDownloadDto,
-  getDownloadCountForDataItemOfUserDto,
+  GetDownloadsByDataItemIdDto,
+  GetDownloadsByUserDto,
   IncrementDownloadCountDto,
 } from './dto';
 
@@ -25,7 +26,7 @@ export class DownloadService {
     }
   }
 
-  async getDownloadsOfUser(dto: getDownloadCountForDataItemOfUserDto) {
+  async getDownloadsOfUser(dto: GetDownloadsByUserDto) {
     try {
       const downloads = await this.prisma.download.findFirst({
         where: {
@@ -60,6 +61,19 @@ export class DownloadService {
           downloadCount: downloads.downloadCount + 1,
         },
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getDownloadsByDataItemId(dto: GetDownloadsByDataItemIdDto) {
+    try {
+      const downloads = await this.prisma.download.findFirst({
+        where: {
+          dataItemId: dto.dataItemId,
+        },
+      });
+      return downloads;
     } catch (error) {
       throw error;
     }

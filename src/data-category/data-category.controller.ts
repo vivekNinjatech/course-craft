@@ -1,4 +1,13 @@
-import { Controller, Delete, HttpCode, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { DataCategoryService } from './data-category.service';
 import {
   CreateDataCategoryDto,
@@ -7,37 +16,43 @@ import {
   UpdateDataCategoryDto,
 } from './dto';
 
-@Controller('data-category')
+@Controller('data-categories')
 export class DataCategoryController {
   constructor(private dataCategoryService: DataCategoryService) {}
 
   @HttpCode(201)
-  @Post('create')
+  @Post('')
   async createDataCategory(dto: CreateDataCategoryDto) {
     return this.dataCategoryService.createDataCategory(dto);
   }
 
   @HttpCode(200)
-  @Post('get')
-  async getDataCategoryById(dto: GetDataCategoryDto) {
+  @Get(':id')
+  async getDataCategoryById(@Param() dto: GetDataCategoryDto) {
     return this.dataCategoryService.getDataCategoryById(dto);
   }
 
   @HttpCode(200)
-  @Post('get-all')
+  @Get('')
   async getDataCategories() {
     return this.dataCategoryService.getDataCategories();
   }
 
   @HttpCode(200)
-  @Post('update')
-  async updateDataCategory(dto: UpdateDataCategoryDto) {
-    return this.dataCategoryService.updateDataCategory(dto);
+  @Put(':id')
+  async updateDataCategory(
+    @Param('id') id: number,
+    @Body() dto: UpdateDataCategoryDto,
+  ) {
+    return this.dataCategoryService.updateDataCategory({
+      id,
+      ...dto,
+    });
   }
 
   @HttpCode(204)
-  @Delete('delete')
-  async deleteDataCategory(dto: DeleteDataCategoryDto) {
+  @Delete(':id')
+  async deleteDataCategory(@Param() dto: DeleteDataCategoryDto) {
     return this.dataCategoryService.deleteDataCategory(dto);
   }
 }

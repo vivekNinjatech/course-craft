@@ -44,3 +44,8 @@ export class GetOrderDto {
   @IsString()
   orderId: string;
 }
+export class GetOrdersByQueryDto {
+  @IsNotEmpty()
+  @IsString()
+  query: string;
+}

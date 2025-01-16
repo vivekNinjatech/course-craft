@@ -2,32 +2,38 @@ import { Controller, HttpCode, Param, Post } from '@nestjs/common';
 import { DownloadService } from './download.service';
 import {
   CreateDownloadDto,
-  getDownloadCountForDataItemOfUserDto,
+  GetDownloadsByDataItemIdDto,
+  GetDownloadsByUserDto,
   IncrementDownloadCountDto,
 } from './dto';
 
-@Controller('download')
+@Controller('downloads')
 export class DownloadController {
   constructor(private downloadService: DownloadService) {}
 
   @HttpCode(201)
-  @Post('create')
+  @Post('')
   async createDownload(dto: CreateDownloadDto) {
     return this.downloadService.createDownload(dto);
+  }
+
+  @HttpCode(200)
+  @Post('user/:userId')
+  async getDownloadsOfUser(@Param('userId') dto: GetDownloadsByUserDto) {
+    return this.downloadService.getDownloadsOfUser(dto);
+  }
+
+  @HttpCode(200)
+  @Post('data-item/:dataItemId')
+  async getDownloadsByDataItemId(
+    @Param('dataItemId') dto: GetDownloadsByDataItemIdDto,
+  ) {
+    return this.downloadService.getDownloadsByDataItemId(dto);
   }
 
   @HttpCode(200)
   @Post('increment')
   async incrementDownloadCount(dto: IncrementDownloadCountDto) {
     return this.downloadService.incrementDownloadCount(dto);
-  }
-
-  @HttpCode(200)
-  @Post('get/:dataItemId/:userId')
-  async getDownloadsOfUser(
-    @Param('dataItemId') dataItemId: number,
-    @Param('userId') userId: number,
-  ) {
-    return this.downloadService.getDownloadsOfUser({ dataItemId, userId });
   }
 }

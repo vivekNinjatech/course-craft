@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   Patch,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { JwtGuard } from '../auth/guard';
@@ -12,18 +13,18 @@ import { GetUser } from '../auth/decorator';
 import { UpdateUserDataDto } from './dto';
 
 @UseGuards(JwtGuard)
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @HttpCode(200)
-  @Get('me')
+  @Get('profile')
   async getMe(@GetUser() user: any) {
     return user;
   }
 
   @HttpCode(200)
-  @Patch('update')
+  @Put('profile')
   async updateUser(
     @GetUser('id') userId: number,
     @Body() dto: UpdateUserDataDto,
@@ -38,7 +39,7 @@ export class UserController {
   }
 
   @HttpCode(200)
-  @Get('all-users')
+  @Get('')
   async getAllUsers() {
     return this.userService.getAllUsers();
   }

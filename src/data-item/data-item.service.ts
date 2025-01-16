@@ -4,6 +4,7 @@ import {
   CreateDataItemDto,
   DeleteDataItemDto,
   GetDataItemDto,
+  GetDataItemsByDto,
   UpdateDataItemDto,
 } from './dto';
 
@@ -81,6 +82,21 @@ export class DataItemService {
           ...dto,
         },
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getDataItemsByQuery(query: GetDataItemsByDto) {
+    try {
+      const dataItems = await this.prisma.dataItem.findMany({
+        where: {
+          title: {
+            contains: query.query,
+          },
+        },
+      });
+      return dataItems;
     } catch (error) {
       throw error;
     }

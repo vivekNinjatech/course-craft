@@ -13,7 +13,7 @@ export class CreateDownloadDto {
   @IsNumber()
   downloadCount: number;
 }
-export class getDownloadCountForDataItemOfUserDto {
+export class GetDownloadsByUserDto {
   @IsNotEmpty()
   @IsNumber()
   userId: number;
@@ -31,4 +31,10 @@ export class IncrementDownloadCountDto {
   @IsNotEmpty()
   @IsNumber()
   userId: number;
+}
+
+export class GetDownloadsByDataItemIdDto {
+  @IsNotEmpty()
+  @IsNumber()
+  dataItemId: number;
 }

@@ -55,3 +55,9 @@ export class UpdateDataItemDto {
   @IsString()
   fileUrl: string;
 }
+
+export class GetDataItemsByDto {
+  @IsNotEmpty()
+  @IsString()
+  query: string;
+}
