@@ -30,4 +30,16 @@ export class UserController {
   ) {
     return this.userService.updateUser(userId, dto);
   }
+
+  @HttpCode(200)
+  @Patch('change-password')
+  async changePassword(@GetUser('email') email: string, @Body() dto: any) {
+    return this.userService.changePassword(email, dto);
+  }
+
+  @HttpCode(200)
+  @Get('all-users')
+  async getAllUsers() {
+    return this.userService.getAllUsers();
+  }
 }
