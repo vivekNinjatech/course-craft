@@ -20,6 +20,7 @@ export class UserController {
   @HttpCode(200)
   @Get('profile')
   async getMe(@GetUser() user: any) {
+    delete user.password;
     return user;
   }
 

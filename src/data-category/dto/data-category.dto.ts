@@ -12,7 +12,7 @@ export class CreateDataCategoryDto {
 
 export class GetDataCategoryDto {
   @IsNotEmpty()
-  @IsNumber()
+  @IsNumber() 
   id: number;
 }
 

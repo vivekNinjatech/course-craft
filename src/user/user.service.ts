@@ -17,8 +17,7 @@ export class UserService {
     if (!user) {
       throw new ForbiddenException('User not found');
     }
-
-    return this.prisma.user.update({
+    const updatedUser = await this.prisma.user.update({
       where: {
         id: userId,
       },
@@ -26,6 +25,8 @@ export class UserService {
         ...dto,
       },
     });
+    delete updatedUser.password;
+    return updatedUser;
   }
 
   async changePassword(email: string, dto: ChangePasswordDto) {

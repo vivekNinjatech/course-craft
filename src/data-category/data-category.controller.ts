@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -22,14 +23,15 @@ export class DataCategoryController {
 
   @HttpCode(201)
   @Post('')
-  async createDataCategory(dto: CreateDataCategoryDto) {
+  async createDataCategory(@Body() dto: CreateDataCategoryDto) {
+    console.log(dto);
     return this.dataCategoryService.createDataCategory(dto);
   }
 
   @HttpCode(200)
   @Get(':id')
-  async getDataCategoryById(@Param() dto: GetDataCategoryDto) {
-    return this.dataCategoryService.getDataCategoryById(dto);
+  async getDataCategoryById(@Param('id', ParseIntPipe) dto: number) {
+    return this.dataCategoryService.getDataCategoryById({id: dto});
   }
 
   @HttpCode(200)

@@ -19,7 +19,11 @@ export class DataCategoryService {
           description: dto.description,
         },
       });
+      return dataCategory;
     } catch (error) {
+      if(error.code === 'P2002') {
+        throw new ForbiddenException('Data category already exists');
+      }
       throw error;
     }
   }

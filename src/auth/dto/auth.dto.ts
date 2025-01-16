@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { AuthRole } from '../type';
 
 export class RegisterDto {
@@ -16,6 +22,7 @@ export class RegisterDto {
 
   @IsNotEmpty()
   @IsString()
+  @IsEnum(AuthRole, { message: 'role must be user or admin' })
   role: AuthRole;
 }
 
