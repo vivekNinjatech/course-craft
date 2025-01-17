@@ -47,5 +47,8 @@ export class GetOrderDto {
 export class GetOrdersByQueryDto {
   @IsNotEmpty()
   @IsString()
-  query: string;
+  field: string;
+
+  @IsNotEmpty()
+  value: string;
 }

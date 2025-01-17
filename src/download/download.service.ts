@@ -90,7 +90,7 @@ export class DownloadService {
           dataItemId: dto.dataItemId,
           downloadCount: download.downloadCount,
         };
-      })
+      });
     } catch (error) {
       throw error;
     }

@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateOrderDto,
@@ -31,7 +35,16 @@ export class OrderService {
 
   async updateOrderStatus(dto: UpdateOrderStatusDto) {
     try {
-      const order = await this.prisma.order.update({
+      const order = await this.prisma.order.findUnique({
+        where: {
+          orderId: dto.orderId,
+        },
+      });
+      if (!order) {
+        throw new ForbiddenException('Order not found');
+      }
+
+      const updatedOrder = await this.prisma.order.update({
         where: {
           orderId: dto.orderId,
         },
@@ -39,7 +52,8 @@ export class OrderService {
           status: dto.status,
         },
       });
-      return order;
+
+      return updatedOrder;
     } catch (error) {
       throw error;
     }
@@ -80,14 +94,51 @@ export class OrderService {
     }
   }
 
-  async getOrdersByQuery(query: GetOrdersByQueryDto) {
+  async getOrdersByQuery(query: Record<string, any>) {
     try {
+      const filters: Record<string, any> = {};
+
+      const validFields = [
+        'id',
+        'userId',
+        'dataItemId',
+        'orderDate',
+        'amount',
+        'status',
+        'orderId',
+      ];
+
+      for (const key of Object.keys(query)) {
+        if (!validFields.includes(key)) {
+          throw new BadRequestException('Invalid field provided for search.');
+        }
+      }
+
+      const numericFields = ['id', 'userId', 'dataItemId', 'amount'];
+
+      for (const key of Object.keys(query)) {
+        if (numericFields.includes(key)) {
+          filters[key] = parseInt(query[key], 10);
+          if (isNaN(filters[key])) {
+            throw new BadRequestException(
+              `Invalid value for field "${key}". Expected a number.`,
+            );
+          }
+        } else if (key === 'orderDate') {
+          const parsedDate = new Date(query[key]);
+          if (isNaN(parsedDate.getTime())) {
+            throw new BadRequestException(
+              `Invalid value for field "orderDate". Expected a valid date string.`,
+            );
+          }
+          filters[key] = parsedDate;
+        } else {
+          filters[key] = query[key];
+        }
+      }
+
       const orders = await this.prisma.order.findMany({
-        where: {
-          orderId: {
-            contains: query.query,
-          },
-        },
+        where: filters,
       });
       return orders;
     } catch (error) {

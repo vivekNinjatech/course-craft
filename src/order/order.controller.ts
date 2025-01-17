@@ -4,8 +4,11 @@ import {
   Get,
   HttpCode,
   Param,
+  ParseIntPipe,
+  Patch,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import {
@@ -15,10 +18,17 @@ import {
   GetOrdersByQueryDto,
   UpdateOrderStatusDto,
 } from './dto';
+import { OrderStatus } from './type';
 
 @Controller('orders')
 export class OrderController {
   constructor(private orderService: OrderService) {}
+
+  @HttpCode(200)
+  @Get('search')
+  async getOrdersByQuery(@Query() query: Record<string, any>) {
+    return this.orderService.getOrdersByQuery(query);
+  }
 
   @HttpCode(201)
   @Post('')
@@ -27,32 +37,29 @@ export class OrderController {
   }
 
   @HttpCode(200)
-  @Put(':id/:status')
-  async updateOrderStatus(@Param() dto: UpdateOrderStatusDto) {
-    return this.orderService.updateOrderStatus(dto);
+  @Patch(':orderId/:status')
+  async updateOrderStatus(
+    @Param('orderId') orderId: string,
+    @Param('status') status: OrderStatus,
+  ) {
+    return this.orderService.updateOrderStatus({ orderId, status });
   }
 
   @HttpCode(200)
   @Get('user/:userId')
-  async getUserOrders(@Param() dto: GetAllUserOrdersDto) {
-    return this.orderService.getUserOrders(dto);
+  async getUserOrders(@Param('userId', ParseIntPipe) userId: number) {
+    return this.orderService.getUserOrders({ userId });
   }
 
   @HttpCode(200)
-  @Get(':id')
-  async getOrderById(@Param() dto: GetOrderDto) {
-    return this.orderService.getOrderById(dto);
+  @Get(':orderId')
+  async getOrderById(@Param('orderId') orderId: string) {
+    return this.orderService.getOrderById({ orderId });
   }
 
   @HttpCode(200)
   @Get('')
   async getAllOrders() {
     return this.orderService.getAllOrders();
-  }
-
-  @HttpCode(200)
-  @Get('search/:query')
-  async getOrdersByQuery(@Param() query: GetOrdersByQueryDto) {
-    return this.orderService.getOrdersByQuery(query);
   }
 }
