@@ -1,0 +1,1 @@
+- add: totalDownloads in data-item table

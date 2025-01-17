@@ -30,7 +30,6 @@ export class DownloadService {
     try {
       const downloads = await this.prisma.download.findFirst({
         where: {
-          dataItemId: dto.dataItemId,
           userId: dto.userId,
         },
       });
@@ -74,6 +73,24 @@ export class DownloadService {
         },
       });
       return downloads;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getDownloadCountsByDataItemId(dto: GetDownloadsByDataItemIdDto) {
+    try {
+      const downloads = await this.prisma.download.findMany({
+        where: {
+          dataItemId: dto.dataItemId,
+        },
+      });
+      return downloads.map((download) => {
+        return {
+          dataItemId: dto.dataItemId,
+          downloadCount: download.downloadCount,
+        };
+      })
     } catch (error) {
       throw error;
     }

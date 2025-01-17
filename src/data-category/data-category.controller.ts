@@ -13,7 +13,6 @@ import { DataCategoryService } from './data-category.service';
 import {
   CreateDataCategoryDto,
   DeleteDataCategoryDto,
-  GetDataCategoryDto,
   UpdateDataCategoryDto,
 } from './dto';
 
@@ -31,7 +30,7 @@ export class DataCategoryController {
   @HttpCode(200)
   @Get(':id')
   async getDataCategoryById(@Param('id', ParseIntPipe) dto: number) {
-    return this.dataCategoryService.getDataCategoryById({id: dto});
+    return this.dataCategoryService.getDataCategoryById({ id: dto });
   }
 
   @HttpCode(200)
@@ -43,8 +42,8 @@ export class DataCategoryController {
   @HttpCode(200)
   @Put(':id')
   async updateDataCategory(
-    @Param('id') id: number,
-    @Body() dto: UpdateDataCategoryDto,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: Omit<UpdateDataCategoryDto, 'id'>,
   ) {
     return this.dataCategoryService.updateDataCategory({
       id,
@@ -54,7 +53,7 @@ export class DataCategoryController {
 
   @HttpCode(204)
   @Delete(':id')
-  async deleteDataCategory(@Param() dto: DeleteDataCategoryDto) {
-    return this.dataCategoryService.deleteDataCategory(dto);
+  async deleteDataCategory(@Param('id', ParseIntPipe) dto: number) {
+    return this.dataCategoryService.deleteDataCategory({ id: dto });
   }
 }

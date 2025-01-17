@@ -1,4 +1,4 @@
-import { Controller, HttpCode, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { DownloadService } from './download.service';
 import {
   CreateDownloadDto,
@@ -13,27 +13,35 @@ export class DownloadController {
 
   @HttpCode(201)
   @Post('')
-  async createDownload(dto: CreateDownloadDto) {
+  async createDownload(@Body()dto: CreateDownloadDto) {
     return this.downloadService.createDownload(dto);
   }
 
   @HttpCode(200)
-  @Post('user/:userId')
-  async getDownloadsOfUser(@Param('userId') dto: GetDownloadsByUserDto) {
-    return this.downloadService.getDownloadsOfUser(dto);
+  @Get('user/:userId')
+  async getDownloadsOfUser(@Param('userId', ParseIntPipe) id: number) {
+    return this.downloadService.getDownloadsOfUser({ userId: id });
   }
 
   @HttpCode(200)
-  @Post('data-item/:dataItemId')
+  @Get('data-item/:dataItemId')
   async getDownloadsByDataItemId(
-    @Param('dataItemId') dto: GetDownloadsByDataItemIdDto,
+    @Param('dataItemId', ParseIntPipe) id: number,
   ) {
-    return this.downloadService.getDownloadsByDataItemId(dto);
+    return this.downloadService.getDownloadsByDataItemId({ dataItemId: id });
   }
 
   @HttpCode(200)
-  @Post('increment')
-  async incrementDownloadCount(dto: IncrementDownloadCountDto) {
+  @Patch('increment')
+  async incrementDownloadCount(@Body() dto: IncrementDownloadCountDto) {
     return this.downloadService.incrementDownloadCount(dto);
+  }
+
+  @HttpCode(200)
+  @Get('download-count/:dataItemId')
+  async getDownloadCountByDataItemId(
+    @Param('dataItemId', ParseIntPipe) id: number,
+  ) {
+    return this.downloadService.getDownloadCountsByDataItemId({ dataItemId: id });
   }
 }

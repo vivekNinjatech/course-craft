@@ -21,7 +21,7 @@ export class DataCategoryService {
       });
       return dataCategory;
     } catch (error) {
-      if(error.code === 'P2002') {
+      if (error.code === 'P2002') {
         throw new ForbiddenException('Data category already exists');
       }
       throw error;

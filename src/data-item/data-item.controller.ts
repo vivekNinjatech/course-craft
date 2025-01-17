@@ -5,16 +5,12 @@ import {
   Get,
   HttpCode,
   Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
 import { DataItemService } from './data-item.service';
-import {
-  CreateDataItemDto,
-  GetDataItemDto,
-  GetDataItemsByDto,
-  UpdateDataItemDto,
-} from './dto';
+import { CreateDataItemDto, GetDataItemsByDto, UpdateDataItemDto } from './dto';
 
 @Controller('data-items')
 export class DataItemController {
@@ -34,21 +30,21 @@ export class DataItemController {
 
   @HttpCode(200)
   @Get(':id')
-  async getDataItemById(@Param() dto: GetDataItemDto) {
-    return this.dataItemService.getDataItemById(dto);
+  async getDataItemById(@Param('id', ParseIntPipe) id: number) {
+    return this.dataItemService.getDataItemById({ id });
   }
 
   @HttpCode(204)
   @Delete(':id')
-  async deleteDataItem(@Param() dto: GetDataItemDto) {
-    return this.dataItemService.deleteDataItem(dto);
+  async deleteDataItem(@Param('id', ParseIntPipe) id: number) {
+    return this.dataItemService.deleteDataItem({ id });
   }
 
   @HttpCode(200)
   @Put(':id')
   async updateDataItem(
-    @Param('id') id: number,
-    @Body() dto: UpdateDataItemDto,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: Omit<UpdateDataItemDto, 'id'>,
   ) {
     return this.dataItemService.updateDataItem({
       id,
