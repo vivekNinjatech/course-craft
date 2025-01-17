@@ -22,7 +22,7 @@ export class CreatePaymentDto {
 export class UpdatePaymentStatusDto {
   @IsNotEmpty()
   @IsNumber()
-  paymentId: number;
+  id: number;
 
   @IsNotEmpty()
   @IsString()
@@ -32,5 +32,5 @@ export class UpdatePaymentStatusDto {
 export class GetPaymentDto {
   @IsNotEmpty()
   @IsNumber()
-  paymentId: number;
+  id: number;
 }

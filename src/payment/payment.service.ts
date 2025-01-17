@@ -7,16 +7,17 @@ export class PaymentService {
   constructor(private prisma: PrismaService) {}
 
   async createPayment(dto: CreatePaymentDto) {
-    return this.prisma.payment.create({
+    return await this.prisma.payment.create({
       data: dto,
     });
   }
 
-  async updatePayment(dto: UpdatePaymentStatusDto) {
+  async updatePaymentStatus(dto: UpdatePaymentStatusDto) {
+    console.log(dto);
     try {
       const payment = await this.prisma.payment.findUnique({
         where: {
-          id: dto.paymentId,
+          id: dto.id,
         },
       });
       if (!payment) {
@@ -24,7 +25,7 @@ export class PaymentService {
       }
       return this.prisma.payment.update({
         where: {
-          id: dto.paymentId,
+          id: dto.id,
         },
         data: {
           status: dto.status,
@@ -36,15 +37,16 @@ export class PaymentService {
   async getPayment(dto: GetPaymentDto) {
     return this.prisma.payment.findUnique({
       where: {
-        id: dto.paymentId,
+        id: dto.id,
       },
     });
   }
 
   async getPaymentByOrderId(orderId: number) {
-    return this.prisma.payment.findFirst({
+    console.log(orderId);
+    return await this.prisma.payment.findFirst({
       where: {
-        orderId,
+        orderId: orderId, // Correct filter
       },
     });
   }

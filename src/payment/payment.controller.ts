@@ -1,8 +1,10 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -16,30 +18,30 @@ export class PaymentController {
 
   @HttpCode(201)
   @Post('')
-  async createPayment(dto: CreatePaymentDto) {
+  async createPayment(@Body() dto: CreatePaymentDto) {
     return this.paymentService.createPayment(dto);
   }
 
   @HttpCode(200)
   @Get('order/:orderId')
-  async getPaymentByOrderId(@Param() orderId: number) {
+  async getPaymentByOrderId(@Param('orderId', ParseIntPipe) orderId: number) {
     return this.paymentService.getPaymentByOrderId(orderId);
   }
 
   @HttpCode(200)
-  @Get('get')
-  async getPayment(dto: GetPaymentDto) {
-    return this.paymentService.getPayment(dto);
+  @Get(':id')
+  async getPayment(@Param('id', ParseIntPipe) id: number) {
+    return this.paymentService.getPayment({ id });
   }
 
   @HttpCode(200)
-  @Put('update')
-  async updatePayment(dto: UpdatePaymentStatusDto) {
-    return this.paymentService.updatePayment(dto);
+  @Patch('status')
+  async updatePayment(@Body() dto: UpdatePaymentStatusDto) {
+    return this.paymentService.updatePaymentStatus(dto);
   }
 
   @HttpCode(200)
-  @Get('get')
+  @Get('')
   async getPayments() {
     return this.paymentService.getPayments();
   }
