@@ -29,6 +29,9 @@ export class OrderService {
       });
       return order;
     } catch (error) {
+      if (error.code === 'P2002') {
+        throw new BadRequestException('Order already exists');
+      }
       throw error;
     }
   }
@@ -55,6 +58,9 @@ export class OrderService {
 
       return updatedOrder;
     } catch (error) {
+      if (error.code === 'P2002') {
+        throw new BadRequestException('Order already exists');
+      }
       throw error;
     }
   }

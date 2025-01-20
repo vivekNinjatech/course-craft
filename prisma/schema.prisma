@@ -97,6 +97,7 @@ model Download {
   lastDownloadDate  DateTime   @default(now())
   downloadCount Int        @default(0)
 
+  @@unique([userId, dataItemId]) 
   user          User       @relation(fields: [userId], references: [id])
   dataItem      DataItem   @relation(fields: [dataItemId], references: [id])
 }

@@ -38,23 +38,20 @@ export class OrderController {
 
   @HttpCode(200)
   @Patch(':orderId/:status')
-  async updateOrderStatus(
-    @Param('orderId') orderId: string,
-    @Param('status') status: OrderStatus,
-  ) {
-    return this.orderService.updateOrderStatus({ orderId, status });
+  async updateOrderStatus(@Param('status') dto: UpdateOrderStatusDto) {
+    return this.orderService.updateOrderStatus(dto);
   }
 
   @HttpCode(200)
   @Get('user/:userId')
-  async getUserOrders(@Param('userId', ParseIntPipe) userId: number) {
-    return this.orderService.getUserOrders({ userId });
+  async getUserOrders(@Param() dto: GetAllUserOrdersDto) {
+    return this.orderService.getUserOrders(dto);
   }
 
   @HttpCode(200)
   @Get(':orderId')
-  async getOrderById(@Param('orderId') orderId: string) {
-    return this.orderService.getOrderById({ orderId });
+  async getOrderById(@Param() dto: GetOrderDto) {
+    return this.orderService.getOrderById(dto);
   }
 
   @HttpCode(200)

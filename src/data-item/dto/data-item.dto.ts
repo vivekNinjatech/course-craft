@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateDataItemDto {
@@ -25,12 +26,14 @@ export class CreateDataItemDto {
 export class GetDataItemDto {
   @IsNotEmpty()
   @IsNumber()
+  @Type(() => Number)
   id: number;
 }
 
 export class DeleteDataItemDto {
   @IsNotEmpty()
   @IsNumber()
+  @Type(() => Number)
   id: number;
 }
 
@@ -59,5 +62,6 @@ export class UpdateDataItemDto {
 export class GetDataItemsByDto {
   @IsNotEmpty()
   @IsString()
+  @Type(() => Number)
   query: string;
 }

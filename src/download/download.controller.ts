@@ -4,7 +4,6 @@ import {
   Get,
   HttpCode,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -28,16 +27,14 @@ export class DownloadController {
 
   @HttpCode(200)
   @Get('user/:userId')
-  async getDownloadsOfUser(@Param('userId', ParseIntPipe) id: number) {
-    return this.downloadService.getDownloadsOfUser({ userId: id });
+  async getDownloadsOfUser(@Param() dto: GetDownloadsByUserDto) {
+    return this.downloadService.getDownloadsOfUser(dto);
   }
 
   @HttpCode(200)
   @Get('data-item/:dataItemId')
-  async getDownloadsByDataItemId(
-    @Param('dataItemId', ParseIntPipe) id: number,
-  ) {
-    return this.downloadService.getDownloadsByDataItemId({ dataItemId: id });
+  async getDownloadsByDataItemId(@Param() dto: GetDownloadsByDataItemIdDto) {
+    return this.downloadService.getDownloadsByDataItemId(dto);
   }
 
   @HttpCode(200)
@@ -49,10 +46,8 @@ export class DownloadController {
   @HttpCode(200)
   @Get('download-count/:dataItemId')
   async getDownloadCountByDataItemId(
-    @Param('dataItemId', ParseIntPipe) id: number,
+    @Param() dto: GetDownloadsByDataItemIdDto,
   ) {
-    return this.downloadService.getDownloadCountsByDataItemId({
-      dataItemId: id,
-    });
+    return this.downloadService.getDownloadCountsByDataItemId(dto);
   }
 }

@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { OrderStatus } from '../type';
+import { Type } from 'class-transformer';
 
 export class CreateOrderDto {
   @IsNotEmpty()
@@ -36,6 +37,7 @@ export class UpdateOrderStatusDto {
 export class GetAllUserOrdersDto {
   @IsNotEmpty()
   @IsNumber()
+  @Type(() => Number)
   userId: number;
 }
 
@@ -51,4 +53,11 @@ export class GetOrdersByQueryDto {
 
   @IsNotEmpty()
   value: string;
+}
+
+export class GetOrderByIdDto {
+  @IsNotEmpty()
+  @IsNumber()
+  @Type(() => Number)
+  id: number;
 }

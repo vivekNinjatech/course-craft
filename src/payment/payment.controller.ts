@@ -4,13 +4,12 @@ import {
   Get,
   HttpCode,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto, GetPaymentDto, UpdatePaymentStatusDto } from './dto';
+import { GetOrderByIdDto } from 'src/order/dto';
 
 @Controller('payments')
 export class PaymentController {
@@ -24,14 +23,14 @@ export class PaymentController {
 
   @HttpCode(200)
   @Get('order/:orderId')
-  async getPaymentByOrderId(@Param('orderId', ParseIntPipe) orderId: number) {
-    return this.paymentService.getPaymentByOrderId(orderId);
+  async getPaymentByOrderId(@Param() dto: GetOrderByIdDto) {
+    return this.paymentService.getPaymentByOrderId(dto);
   }
 
   @HttpCode(200)
   @Get(':id')
-  async getPayment(@Param('id', ParseIntPipe) id: number) {
-    return this.paymentService.getPayment({ id });
+  async getPayment(@Param() dto: GetPaymentDto) {
+    return this.paymentService.getPayment(dto);
   }
 
   @HttpCode(200)

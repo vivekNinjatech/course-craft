@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePaymentDto, GetPaymentDto, UpdatePaymentStatusDto } from './dto';
+import { GetOrderByIdDto, GetOrderDto } from 'src/order/dto';
 
 @Injectable()
 export class PaymentService {
@@ -13,7 +14,6 @@ export class PaymentService {
   }
 
   async updatePaymentStatus(dto: UpdatePaymentStatusDto) {
-    console.log(dto);
     try {
       const payment = await this.prisma.payment.findUnique({
         where: {
@@ -42,11 +42,10 @@ export class PaymentService {
     });
   }
 
-  async getPaymentByOrderId(orderId: number) {
-    console.log(orderId);
+  async getPaymentByOrderId(orderId: GetOrderByIdDto) {
     return await this.prisma.payment.findFirst({
       where: {
-        orderId: orderId, // Correct filter
+        orderId: orderId.id,
       },
     });
   }

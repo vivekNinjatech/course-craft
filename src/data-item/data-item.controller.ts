@@ -10,7 +10,13 @@ import {
   Put,
 } from '@nestjs/common';
 import { DataItemService } from './data-item.service';
-import { CreateDataItemDto, GetDataItemsByDto, UpdateDataItemDto } from './dto';
+import {
+  CreateDataItemDto,
+  DeleteDataItemDto,
+  GetDataItemDto,
+  GetDataItemsByDto,
+  UpdateDataItemDto,
+} from './dto';
 
 @Controller('data-items')
 export class DataItemController {
@@ -30,14 +36,14 @@ export class DataItemController {
 
   @HttpCode(200)
   @Get(':id')
-  async getDataItemById(@Param('id', ParseIntPipe) id: number) {
-    return this.dataItemService.getDataItemById({ id });
+  async getDataItemById(@Param() dto: GetDataItemDto) {
+    return this.dataItemService.getDataItemById(dto);
   }
 
-  @HttpCode(204)
+  @HttpCode(200)
   @Delete(':id')
-  async deleteDataItem(@Param('id', ParseIntPipe) id: number) {
-    return this.dataItemService.deleteDataItem({ id });
+  async deleteDataItem(@Param() dto: DeleteDataItemDto) {
+    return this.dataItemService.deleteDataItem(dto);
   }
 
   @HttpCode(200)

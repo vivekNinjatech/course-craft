@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-
+import { Type } from 'class-transformer';
 export class CreateDataCategoryDto {
   @IsNotEmpty()
   @IsString()
@@ -13,12 +13,14 @@ export class CreateDataCategoryDto {
 export class GetDataCategoryDto {
   @IsNotEmpty()
   @IsNumber()
+  @Type(() => Number)
   id: number;
 }
 
 export class UpdateDataCategoryDto {
   @IsNotEmpty()
   @IsNumber()
+  @Type(() => Number)
   id: number;
 
   @IsNotEmpty()
@@ -33,5 +35,6 @@ export class UpdateDataCategoryDto {
 export class DeleteDataCategoryDto {
   @IsNotEmpty()
   @IsNumber()
+  @Type(() => Number)
   id: number;
 }
