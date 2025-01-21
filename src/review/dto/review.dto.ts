@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
   IsNumber,
@@ -29,25 +30,29 @@ export class CreateReviewDto {
 export class GetReviewsByDataItemIdDto {
   @IsNotEmpty()
   @IsNumber()
+  @Type(() => Number)
   dataItemId: number;
 }
 
 export class GetReviewDto {
   @IsNotEmpty()
   @IsNumber()
-  reviewId: number;
+  @Type(() => Number)
+  id: number;
 }
 
 export class DeleteReviewDto {
   @IsNotEmpty()
   @IsNumber()
-  reviewId: number;
+  @Type(() => Number)
+  id: number;
 }
 
 export class UpdateReviewDto {
   @IsNotEmpty()
   @IsNumber()
-  reviewId: number;
+  @Type(() => Number)
+  id: number;
 
   @IsNotEmpty()
   @IsNumber()
@@ -56,4 +61,11 @@ export class UpdateReviewDto {
   @IsNotEmpty()
   @IsString()
   comment: string;
+}
+
+export class GetReviewsByUserIdDto {
+  @IsNotEmpty()
+  @IsNumber()
+  @Type(() => Number)
+  userId: number;
 }

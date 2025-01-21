@@ -21,10 +21,10 @@ import {
 export class DataCategoryController {
   constructor(private dataCategoryService: DataCategoryService) {}
 
-  @HttpCode(201)
-  @Post('')
-  async createDataCategory(@Body() dto: CreateDataCategoryDto) {
-    return this.dataCategoryService.createDataCategory(dto);
+  @HttpCode(200)
+  @Get('')
+  async getDataCategories() {
+    return this.dataCategoryService.getDataCategories();
   }
 
   @HttpCode(200)
@@ -33,16 +33,16 @@ export class DataCategoryController {
     return this.dataCategoryService.getDataCategoryById(dto);
   }
 
-  @HttpCode(200)
-  @Get('')
-  async getDataCategories() {
-    return this.dataCategoryService.getDataCategories();
+  @HttpCode(201)
+  @Post('')
+  async createDataCategory(@Body() dto: CreateDataCategoryDto) {
+    return this.dataCategoryService.createDataCategory(dto);
   }
 
   @HttpCode(200)
   @Put(':id')
   async updateDataCategory(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: UpdateDataCategoryDto['id'],
     @Body() dto: Omit<UpdateDataCategoryDto, 'id'>,
   ) {
     return this.dataCategoryService.updateDataCategory({ id, ...dto });

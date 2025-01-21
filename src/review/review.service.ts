@@ -5,6 +5,8 @@ import {
   GetReviewsByDataItemIdDto,
   GetReviewDto,
   UpdateReviewDto,
+  GetReviewsByUserIdDto,
+  DeleteReviewDto,
 } from './dto';
 
 @Injectable()
@@ -24,6 +26,14 @@ export class ReviewService {
 
       return review;
     } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ForbiddenException('Review already exists');
+      }
+      if (error.code === 'P2003') {
+        throw new ForbiddenException(
+          'Foreign key constraint violated. Please check the dataItemId.',
+        );
+      }
       throw error;
     }
   }
@@ -39,16 +49,16 @@ export class ReviewService {
   async getReview(dto: GetReviewDto) {
     return await this.prisma.review.findFirst({
       where: {
-        id: dto.reviewId,
+        id: dto.id,
       },
     });
   }
 
-  async deleteReview(reviewId: number) {
+  async deleteReview(dto: DeleteReviewDto) {
     try {
       const review = await this.prisma.review.findFirst({
         where: {
-          id: reviewId,
+          id: dto.id,
         },
       });
       if (!review) {
@@ -56,7 +66,7 @@ export class ReviewService {
       }
       return this.prisma.review.delete({
         where: {
-          id: reviewId,
+          id: dto.id,
         },
       });
     } catch (error) {
@@ -68,7 +78,7 @@ export class ReviewService {
     try {
       const review = await this.prisma.review.findFirst({
         where: {
-          id: dto.reviewId,
+          id: dto.id,
         },
       });
       if (!review) {
@@ -76,7 +86,7 @@ export class ReviewService {
       }
       return this.prisma.review.update({
         where: {
-          id: dto.reviewId,
+          id: dto.id,
         },
         data: {
           rating: dto.rating,
@@ -88,11 +98,15 @@ export class ReviewService {
     }
   }
 
-  async getUserReviews(userId: number) {
+  async getUserReviews(dto: GetReviewsByUserIdDto) {
     return await this.prisma.review.findMany({
       where: {
-        userId: userId,
+        userId: dto.userId,
       },
     });
+  }
+
+  async getAllReviews() {
+    return await this.prisma.review.findMany();
   }
 }

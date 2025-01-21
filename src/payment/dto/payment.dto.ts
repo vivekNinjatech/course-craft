@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { PaymentStatus } from '../type/payment.type';
+import { Type } from 'class-transformer';
 
 export class CreatePaymentDto {
   @IsNotEmpty()
@@ -22,6 +23,7 @@ export class CreatePaymentDto {
 export class UpdatePaymentStatusDto {
   @IsNotEmpty()
   @IsNumber()
+  @Type(() => Number)
   id: number;
 
   @IsNotEmpty()
@@ -32,5 +34,13 @@ export class UpdatePaymentStatusDto {
 export class GetPaymentDto {
   @IsNotEmpty()
   @IsNumber()
+  @Type(() => Number)
   id: number;
+}
+
+export class GetPaymentByOrderIdDto {
+  @IsNotEmpty()
+  @IsNumber()
+  @Type(() => Number)
+  orderId: number;
 }

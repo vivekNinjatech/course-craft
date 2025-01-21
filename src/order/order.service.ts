@@ -8,7 +8,6 @@ import {
   CreateOrderDto,
   GetAllUserOrdersDto,
   GetOrderDto,
-  GetOrdersByQueryDto,
   UpdateOrderStatusDto,
 } from './dto';
 
@@ -31,6 +30,11 @@ export class OrderService {
     } catch (error) {
       if (error.code === 'P2002') {
         throw new BadRequestException('Order already exists');
+      }
+      if (error.code === 'P2003') {
+        throw new BadRequestException(
+          'Foreign key constraint violated. Please check the dataItemId.',
+        );
       }
       throw error;
     }

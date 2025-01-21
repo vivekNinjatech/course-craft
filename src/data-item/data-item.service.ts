@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateDataItemDto,
@@ -25,6 +29,14 @@ export class DataItemService {
       });
       return dataItem;
     } catch (error) {
+      if (error.code === 'P2002') {
+        throw new BadRequestException('Data item already exists');
+      }
+      if (error.code === 'P2003') {
+        throw new BadRequestException(
+          'Foreign key constraint violated. Please check the categoryId.',
+        );
+      }
       throw error;
     }
   }
@@ -60,6 +72,9 @@ export class DataItemService {
       });
       return dataItem;
     } catch (error) {
+      if (error.code === 'P2025') {
+        throw new ForbiddenException('Data item not found');
+      }
       throw error;
     }
   }
@@ -74,7 +89,7 @@ export class DataItemService {
       if (!dataItem) {
         throw new ForbiddenException('Data item not found');
       }
-      return this.prisma.dataItem.update({
+      return await this.prisma.dataItem.update({
         where: {
           id: dto.id,
         },
@@ -83,6 +98,14 @@ export class DataItemService {
         },
       });
     } catch (error) {
+      if (error.code === 'P2002') {
+        throw new BadRequestException('Data item already exists');
+      }
+      if (error.code === 'P2003') {
+        throw new BadRequestException(
+          'Foreign key constraint violated. Please check the categoryId.',
+        );
+      }
       throw error;
     }
   }

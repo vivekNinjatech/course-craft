@@ -48,11 +48,7 @@ export class GetOrderDto {
 }
 export class GetOrdersByQueryDto {
   @IsNotEmpty()
-  @IsString()
-  field: string;
-
-  @IsNotEmpty()
-  value: string;
+  query: Record<string, any>;
 }
 
 export class GetOrderByIdDto {

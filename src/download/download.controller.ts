@@ -19,12 +19,6 @@ import {
 export class DownloadController {
   constructor(private downloadService: DownloadService) {}
 
-  @HttpCode(201)
-  @Post('')
-  async createDownload(@Body() dto: CreateDownloadDto) {
-    return this.downloadService.createDownload(dto);
-  }
-
   @HttpCode(200)
   @Get('user/:userId')
   async getDownloadsOfUser(@Param() dto: GetDownloadsByUserDto) {
@@ -38,16 +32,22 @@ export class DownloadController {
   }
 
   @HttpCode(200)
-  @Patch('increment')
-  async incrementDownloadCount(@Body() dto: IncrementDownloadCountDto) {
-    return this.downloadService.incrementDownloadCount(dto);
-  }
-
-  @HttpCode(200)
   @Get('download-count/:dataItemId')
   async getDownloadCountByDataItemId(
     @Param() dto: GetDownloadsByDataItemIdDto,
   ) {
     return this.downloadService.getDownloadCountsByDataItemId(dto);
+  }
+
+  @HttpCode(201)
+  @Post('')
+  async createDownload(@Body() dto: CreateDownloadDto) {
+    return this.downloadService.createDownload(dto);
+  }
+
+  @HttpCode(200)
+  @Patch('increment')
+  async incrementDownloadCount(@Body() dto: IncrementDownloadCountDto) {
+    return this.downloadService.incrementDownloadCount(dto);
   }
 }

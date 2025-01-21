@@ -18,6 +18,12 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @HttpCode(200)
+  @Get('')
+  async getAllUsers() {
+    return this.userService.getAllUsers();
+  }
+
+  @HttpCode(200)
   @Get('profile')
   async getMe(@GetUser() user: any) {
     delete user.password;
@@ -37,11 +43,5 @@ export class UserController {
   @Patch('change-password')
   async changePassword(@GetUser('email') email: string, @Body() dto: any) {
     return this.userService.changePassword(email, dto);
-  }
-
-  @HttpCode(200)
-  @Get('')
-  async getAllUsers() {
-    return this.userService.getAllUsers();
   }
 }

@@ -90,6 +90,14 @@ export class DataCategoryService {
         },
       });
     } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ForbiddenException('Data category already exists');
+      }
+      if (error.code === 'P2003') {
+        throw new ForbiddenException(
+          'Foreign key constraint violated. Please check the categoryId.',
+        );
+      }
       throw error;
     }
   }

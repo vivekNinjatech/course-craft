@@ -22,12 +22,6 @@ import {
 export class DataItemController {
   constructor(private dataItemService: DataItemService) {}
 
-  @HttpCode(201)
-  @Post('')
-  async createDataItem(@Body() dto: CreateDataItemDto) {
-    return this.dataItemService.createDataItem(dto);
-  }
-
   @HttpCode(200)
   @Get('')
   async getDataItems() {
@@ -41,15 +35,21 @@ export class DataItemController {
   }
 
   @HttpCode(200)
-  @Delete(':id')
-  async deleteDataItem(@Param() dto: DeleteDataItemDto) {
-    return this.dataItemService.deleteDataItem(dto);
+  @Get(':title')
+  async getDataItemsByQuery(@Param() dto: GetDataItemsByDto) {
+    return this.dataItemService.getDataItemsByQuery(dto);
+  }
+
+  @HttpCode(201)
+  @Post('')
+  async createDataItem(@Body() dto: CreateDataItemDto) {
+    return this.dataItemService.createDataItem(dto);
   }
 
   @HttpCode(200)
   @Put(':id')
   async updateDataItem(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: UpdateDataItemDto['id'],
     @Body() dto: Omit<UpdateDataItemDto, 'id'>,
   ) {
     return this.dataItemService.updateDataItem({
@@ -59,8 +59,8 @@ export class DataItemController {
   }
 
   @HttpCode(200)
-  @Get(':title')
-  async getDataItemsByQuery(@Param() dto: GetDataItemsByDto) {
-    return this.dataItemService.getDataItemsByQuery(dto);
+  @Delete(':id')
+  async deleteDataItem(@Param() dto: DeleteDataItemDto) {
+    return this.dataItemService.deleteDataItem(dto);
   }
 }

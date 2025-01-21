@@ -1,16 +1,36 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePaymentDto, GetPaymentDto, UpdatePaymentStatusDto } from './dto';
-import { GetOrderByIdDto, GetOrderDto } from 'src/order/dto';
+import {
+  CreatePaymentDto,
+  GetPaymentByOrderIdDto,
+  GetPaymentDto,
+  UpdatePaymentStatusDto,
+} from './dto';
 
 @Injectable()
 export class PaymentService {
   constructor(private prisma: PrismaService) {}
 
   async createPayment(dto: CreatePaymentDto) {
-    return await this.prisma.payment.create({
-      data: dto,
-    });
+    try {
+      return await this.prisma.payment.create({
+        data: dto,
+      });
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ForbiddenException('Payment already exists');
+      }
+      if (error.code === 'P2003') {
+        throw new BadRequestException(
+          'Foreign key constraint violated. Please check the orderId.',
+        );
+      }
+      throw error;
+    }
   }
 
   async updatePaymentStatus(dto: UpdatePaymentStatusDto) {
@@ -31,7 +51,17 @@ export class PaymentService {
           status: dto.status,
         },
       });
-    } catch (error) {}
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new BadRequestException('Payment already exists');
+      }
+      if (error.code === 'P2003') {
+        throw new BadRequestException(
+          'Foreign key constraint violated. Please check the orderId.',
+        );
+      }
+      throw error;
+    }
   }
 
   async getPayment(dto: GetPaymentDto) {
@@ -42,10 +72,10 @@ export class PaymentService {
     });
   }
 
-  async getPaymentByOrderId(orderId: GetOrderByIdDto) {
+  async getPaymentByOrderId(dto: GetPaymentByOrderIdDto) {
     return await this.prisma.payment.findFirst({
       where: {
-        orderId: orderId.id,
+        orderId: dto.orderId,
       },
     });
   }
