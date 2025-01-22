@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { DataCategoryService } from './data-category.service';
 import {
@@ -16,13 +17,19 @@ import {
   GetDataCategoryDto,
   UpdateDataCategoryDto,
 } from './dto';
+import { JwtGuard } from 'src/auth/guard';
+import { RolesGuard } from 'src/auth/decorator';
+import { AuthRole } from 'src/auth/type';
+import { Roles } from 'src/utils/roles.util';
 
 @Controller('data-categories')
+@UseGuards(JwtGuard, RolesGuard)
 export class DataCategoryController {
   constructor(private dataCategoryService: DataCategoryService) {}
 
   @HttpCode(200)
   @Get('')
+  @Roles(AuthRole.ADMIN)
   async getDataCategories() {
     return this.dataCategoryService.getDataCategories();
   }

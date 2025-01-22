@@ -28,7 +28,7 @@ export class AuthService {
       });
       delete user.password;
 
-      return this.signtoken(user.id, user.email);
+      return this.signtoken(user.id, user.email, user.role);
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -58,12 +58,13 @@ export class AuthService {
 
     delete user.password;
 
-    return this.signtoken(user.id, user.email);
+    return this.signtoken(user.id, user.email, user.role as AuthRole);
   }
-  async signtoken(userId: number, email: string) {
+  async signtoken(userId: number, email: string, role: AuthRole) {
     const data = {
       sub: userId,
       email,
+      role,
     };
     const secret = this.config.get('JWT_SECRET');
 
