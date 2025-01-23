@@ -11,17 +11,17 @@ export const GetUser = createParamDecorator(
   (data: string | undefined, ctx: ExecutionContext) => {
     const request: Express.Request = ctx.switchToHttp().getRequest();
     if (data) {
-      return request.user[data];
+      return request.user ? request.user[data] : null;
     }
-    return request.user;
+    return request.user || null;
   },
 );
 
 export class RolesGuard implements CanActivate {
-  constructor(private reflactor: Reflector) {}
+  constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflactor.getAllAndOverride<AuthRole[]>(
+    const requiredRoles = this.reflector.getAllAndOverride<AuthRole[]>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
     );
@@ -29,7 +29,12 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     const { user } = context.switchToHttp().getRequest();
-    console
-    return requiredRoles.some((role) => user.role?.includes(role));
+
+    // Add a null check for user
+    if (!user || !user.role) {
+      return false; // If user or user.role is undefined, deny access
+    }
+
+    return requiredRoles.some((role) => user.role.includes(role));
   }
 }
