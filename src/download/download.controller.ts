@@ -4,17 +4,21 @@ import {
   Get,
   HttpCode,
   Param,
-  Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { DownloadService } from './download.service';
 import {
   CreateDownloadDto,
   GetDownloadsByDataItemIdDto,
   GetDownloadsByUserDto,
-  IncrementDownloadCountDto,
 } from './dto';
+import { Roles } from 'src/auth/decorator';
+import { AuthRole } from 'src/auth/type';
+import { JwtGuard } from 'src/auth/guard';
+import { RoleGuard } from 'src/auth/role/role.guard';
 
+@UseGuards(JwtGuard, RoleGuard)
 @Controller('downloads')
 export class DownloadController {
   constructor(private downloadService: DownloadService) {}
@@ -39,15 +43,10 @@ export class DownloadController {
     return this.downloadService.getDownloadCountsByDataItemId(dto);
   }
 
+  @Roles(AuthRole.USER)
   @HttpCode(201)
   @Post('')
   async createDownload(@Body() dto: CreateDownloadDto) {
     return this.downloadService.createDownload(dto);
-  }
-
-  @HttpCode(200)
-  @Patch('increment')
-  async incrementDownloadCount(@Body() dto: IncrementDownloadCountDto) {
-    return this.downloadService.incrementDownloadCount(dto);
   }
 }

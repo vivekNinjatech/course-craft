@@ -21,16 +21,6 @@ export class GetDownloadsByUserDto {
   userId: number;
 }
 
-export class IncrementDownloadCountDto {
-  @IsNotEmpty()
-  @IsNumber()
-  dataItemId: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  userId: number;
-}
-
 export class GetDownloadsByDataItemIdDto {
   @IsNotEmpty()
   @IsNumber()

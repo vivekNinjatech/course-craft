@@ -22,7 +22,7 @@ export class RegisterDto {
 
   @IsNotEmpty()
   @IsString()
-  @IsEnum(AuthRole, { message: 'role must be user or admin' })
+  @IsEnum(AuthRole, { message: 'role must be USER or ADMIN' })
   role: AuthRole;
 }
 

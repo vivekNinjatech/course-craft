@@ -4,7 +4,6 @@ import {
   CreateDownloadDto,
   GetDownloadsByDataItemIdDto,
   GetDownloadsByUserDto,
-  IncrementDownloadCountDto,
 } from './dto';
 
 @Injectable()
@@ -13,7 +12,6 @@ export class DownloadService {
 
   async createDownload(dto: CreateDownloadDto) {
     try {
-      // Check if user exists
       const user = await this.prisma.user.findUnique({
         where: { id: dto.userId },
       });
@@ -22,7 +20,6 @@ export class DownloadService {
         throw new ForbiddenException('User not found');
       }
 
-      // Check if data item exists
       const dataItem = await this.prisma.dataItem.findUnique({
         where: { id: dto.dataItemId },
       });
@@ -64,32 +61,6 @@ export class DownloadService {
         },
       });
       return downloads;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async incrementDownloadCount(dto: IncrementDownloadCountDto) {
-    try {
-      const downloads = await this.prisma.download.findFirst({
-        where: {
-          dataItemId: dto.dataItemId,
-          userId: dto.userId,
-        },
-      });
-      if (!downloads) {
-        throw new ForbiddenException('Downloads for this data item not found');
-      }
-      return this.prisma.download.update({
-        where: {
-          id: downloads.id,
-          dataItemId: dto.dataItemId,
-          userId: dto.userId,
-        },
-        data: {
-          downloadCount: downloads.downloadCount + 1,
-        },
-      });
     } catch (error) {
       throw error;
     }

@@ -18,42 +18,46 @@ import {
   UpdateDataCategoryDto,
 } from './dto';
 import { JwtGuard } from 'src/auth/guard';
+import { Roles } from 'src/auth/decorator';
+import { AuthRole } from 'src/auth/type';
+import { RoleGuard } from 'src/auth/role/role.guard';
 
 @Controller('data-categories')
-@UseGuards(JwtGuard)
+@UseGuards(JwtGuard, RoleGuard) // Applying guards at the controller level
 export class DataCategoryController {
-  constructor(private dataCategoryService: DataCategoryService) {}
+  constructor(private readonly dataCategoryService: DataCategoryService) {}
 
-  @HttpCode(200)
   @Get('')
-  async getDataCategories() {
+  getDataCategories() {
     return this.dataCategoryService.getDataCategories();
   }
 
-  @HttpCode(200)
   @Get(':id')
-  async getDataCategoryById(@Param() dto: GetDataCategoryDto) {
+  getDataCategoryById(@Param() dto: GetDataCategoryDto) {
     return this.dataCategoryService.getDataCategoryById(dto);
   }
 
-  @HttpCode(201)
+  @Roles(AuthRole.ADMIN)
   @Post('')
-  async createDataCategory(@Body() dto: CreateDataCategoryDto) {
+  @HttpCode(201)
+  createDataCategory(@Body() dto: CreateDataCategoryDto) {
     return this.dataCategoryService.createDataCategory(dto);
   }
 
-  @HttpCode(200)
+  @Roles(AuthRole.ADMIN)
   @Put(':id')
-  async updateDataCategory(
-    @Param('id', ParseIntPipe) id: UpdateDataCategoryDto['id'],
+  @HttpCode(200)
+  updateDataCategory(
+    @Param('id', ParseIntPipe) id: number,
     @Body() dto: Omit<UpdateDataCategoryDto, 'id'>,
   ) {
     return this.dataCategoryService.updateDataCategory({ id, ...dto });
   }
 
-  @HttpCode(200)
+  @Roles(AuthRole.ADMIN)
   @Delete(':id')
-  async deleteDataCategory(@Param() dto: DeleteDataCategoryDto) {
+  @HttpCode(200)
+  deleteDataCategory(@Param() dto: DeleteDataCategoryDto) {
     return this.dataCategoryService.deleteDataCategory(dto);
   }
 }

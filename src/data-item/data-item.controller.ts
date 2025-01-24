@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { DataItemService } from './data-item.service';
 import {
@@ -17,7 +18,12 @@ import {
   GetDataItemsByDto,
   UpdateDataItemDto,
 } from './dto';
+import { JwtGuard } from 'src/auth/guard';
+import { RoleGuard } from 'src/auth/role/role.guard';
+import { Roles } from 'src/auth/decorator';
+import { AuthRole } from 'src/auth/type';
 
+@UseGuards(JwtGuard, RoleGuard)
 @Controller('data-items')
 export class DataItemController {
   constructor(private dataItemService: DataItemService) {}
@@ -40,12 +46,14 @@ export class DataItemController {
     return this.dataItemService.getDataItemsByQuery(dto);
   }
 
+  @Roles(AuthRole.ADMIN)
   @HttpCode(201)
   @Post('')
   async createDataItem(@Body() dto: CreateDataItemDto) {
     return this.dataItemService.createDataItem(dto);
   }
 
+  @Roles(AuthRole.ADMIN)
   @HttpCode(200)
   @Put(':id')
   async updateDataItem(
@@ -58,6 +66,7 @@ export class DataItemController {
     });
   }
 
+  @Roles(AuthRole.ADMIN)
   @HttpCode(200)
   @Delete(':id')
   async deleteDataItem(@Param() dto: DeleteDataItemDto) {
