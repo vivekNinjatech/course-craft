@@ -15,15 +15,20 @@ export class AuthService {
     private jwt: JwtService,
   ) {}
 
-  async register(dto: RegisterDto) {
+  async register(dto: RegisterDto, callerRole: AuthRole) {
     try {
+      if (dto.role === AuthRole.ADMIN && callerRole !== AuthRole.SUPERADMIN) {
+        throw new ForbiddenException(
+          'Only SUPERADMIN can create ADMIN accounts',
+        );
+      }
       const hash: string = await argon.hash(dto.password);
       const user: any = await this.prisma.user.create({
         data: {
-          email: dto.email,
+          email: dto.email.toLowerCase(),
           username: dto.username,
           password: hash,
-          role: AuthRole.USER,
+          role: dto.role,
         },
       });
       delete user.password;
