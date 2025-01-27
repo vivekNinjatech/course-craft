@@ -1,4 +1,10 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateReviewDto,
@@ -27,10 +33,10 @@ export class ReviewService {
       return review;
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new ForbiddenException('Review already exists');
+        throw new ConflictException('Review already exists');
       }
       if (error.code === 'P2003') {
-        throw new ForbiddenException(
+        throw new BadRequestException(
           'Foreign key constraint violated. Please check the dataItemId.',
         );
       }
@@ -62,7 +68,7 @@ export class ReviewService {
         },
       });
       if (!review) {
-        throw new ForbiddenException('Review not found');
+        throw new NotFoundException('Review not found');
       }
       return this.prisma.review.delete({
         where: {
@@ -82,7 +88,7 @@ export class ReviewService {
         },
       });
       if (!review) {
-        throw new ForbiddenException('Review not found');
+        throw new NotFoundException('Review not found');
       }
       return this.prisma.review.update({
         where: {

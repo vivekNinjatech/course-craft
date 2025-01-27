@@ -1,4 +1,10 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateDataCategoryDto,
@@ -22,7 +28,7 @@ export class DataCategoryService {
       return dataCategory;
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new ForbiddenException('Data category already exists');
+        throw new ConflictException('Data category already exists');
       }
       throw error;
     }
@@ -58,7 +64,7 @@ export class DataCategoryService {
         },
       });
       if (!dataCategory) {
-        throw new ForbiddenException('Data category not found');
+        throw new NotFoundException('Data category not found');
       }
 
       return await this.prisma.dataCategory.delete({
@@ -79,7 +85,7 @@ export class DataCategoryService {
         },
       });
       if (!dataCategory) {
-        throw new ForbiddenException('Data category not found');
+        throw new NotFoundException('Data category not found');
       }
       return this.prisma.dataCategory.update({
         where: {
@@ -91,10 +97,10 @@ export class DataCategoryService {
       });
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new ForbiddenException('Data category already exists');
+        throw new ConflictException('Data category already exists');
       }
       if (error.code === 'P2003') {
-        throw new ForbiddenException(
+        throw new BadRequestException(
           'Foreign key constraint violated. Please check the categoryId.',
         );
       }

@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateDownloadDto,
@@ -17,7 +21,7 @@ export class DownloadService {
       });
 
       if (!user) {
-        throw new ForbiddenException('User not found');
+        throw new NotFoundException('User not found');
       }
 
       const dataItem = await this.prisma.dataItem.findUnique({
@@ -25,7 +29,7 @@ export class DownloadService {
       });
 
       if (!dataItem) {
-        throw new ForbiddenException('Data item not found');
+        throw new NotFoundException('Data item not found');
       }
 
       const download = await this.prisma.download.upsert({

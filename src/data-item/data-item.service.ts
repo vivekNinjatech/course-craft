@@ -1,7 +1,9 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
@@ -30,7 +32,7 @@ export class DataItemService {
       return dataItem;
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new BadRequestException('Data item already exists');
+        throw new ConflictException('Data item already exists');
       }
       if (error.code === 'P2003') {
         throw new BadRequestException(
@@ -73,7 +75,7 @@ export class DataItemService {
       return dataItem;
     } catch (error) {
       if (error.code === 'P2025') {
-        throw new ForbiddenException('Data item not found');
+        throw new NotFoundException('Data item not found');
       }
       throw error;
     }
@@ -87,7 +89,7 @@ export class DataItemService {
         },
       });
       if (!dataItem) {
-        throw new ForbiddenException('Data item not found');
+        throw new NotFoundException('Data item not found');
       }
       return await this.prisma.dataItem.update({
         where: {
@@ -99,7 +101,7 @@ export class DataItemService {
       });
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new BadRequestException('Data item already exists');
+        throw new ConflictException('Data item already exists');
       }
       if (error.code === 'P2003') {
         throw new BadRequestException(

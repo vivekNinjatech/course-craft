@@ -1,7 +1,9 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
@@ -29,7 +31,7 @@ export class OrderService {
       return order;
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new BadRequestException('Order already exists');
+        throw new ConflictException('Order already exists');
       }
       if (error.code === 'P2003') {
         throw new BadRequestException(
@@ -48,7 +50,7 @@ export class OrderService {
         },
       });
       if (!order) {
-        throw new ForbiddenException('Order not found');
+        throw new NotFoundException('Order not found');
       }
 
       const updatedOrder = await this.prisma.order.update({
@@ -63,7 +65,7 @@ export class OrderService {
       return updatedOrder;
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new BadRequestException('Order already exists');
+        throw new ConflictException('Order already exists');
       }
       throw error;
     }

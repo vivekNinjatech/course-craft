@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ChangePasswordDto, GetUserDataDto, UpdateUserDataDto } from './dto';
 import * as argon from 'argon2';
@@ -15,7 +19,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new ForbiddenException('User not found');
+      throw new NotFoundException('User not found');
     }
     const updatedUser = await this.prisma.user.update({
       where: {
@@ -37,7 +41,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new ForbiddenException('User not found');
+      throw new NotFoundException('User not found');
     }
 
     const result = await this.prisma.user.update({

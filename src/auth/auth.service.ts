@@ -1,4 +1,10 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto, RegisterDto } from './dto';
@@ -15,13 +21,19 @@ export class AuthService {
     private jwt: JwtService,
   ) {}
 
-  async register(dto: RegisterDto, callerRole: AuthRole) {
+  async register(dto: RegisterDto, isAdmin: boolean) {
     try {
-      if (dto.role === AuthRole.ADMIN && callerRole !== AuthRole.SUPERADMIN) {
-        throw new ForbiddenException(
-          'Only SUPERADMIN can create ADMIN accounts',
-        );
+      if (dto.role === AuthRole.SUPERADMIN) {
+        const isSuperAdminExists = await this.prisma.user.findFirst({
+          where: { role: AuthRole.SUPERADMIN },
+        });
+        if (isSuperAdminExists) {
+          throw new ConflictException('Super admin already exists');
+        }
+      } else if (dto.role !== AuthRole.USER && !isAdmin) {
+        throw new ForbiddenException('Only USER can be created');
       }
+
       const hash: string = await argon.hash(dto.password);
       const user: any = await this.prisma.user.create({
         data: {
@@ -37,7 +49,7 @@ export class AuthService {
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ForbiddenException('Credentials already taken');
+          throw new ConflictException('Credentials already taken');
         }
       }
       throw error;
@@ -52,13 +64,13 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new ForbiddenException('User not found');
+      throw new NotFoundException('User not found');
     }
 
     const isCorrectPassword = await argon.verify(user.password, dto.password);
 
     if (!isCorrectPassword) {
-      throw new ForbiddenException('Credentials incorrect');
+      throw new UnauthorizedException('Credentials incorrect');
     }
 
     delete user.password;

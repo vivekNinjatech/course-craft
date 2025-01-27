@@ -9,6 +9,10 @@ import { DownloadModule } from './download/download.module';
 import { OrderModule } from './order/order.module';
 import { PaymentModule } from './payment/payment.module';
 import { ReviewModule } from './review/review.module';
+import { AdminController } from './admin/admin.controller';
+import { AdminService } from './admin/admin.service';
+import { AdminModule } from './admin/admin.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -24,6 +28,7 @@ import { ReviewModule } from './review/review.module';
     OrderModule,
     PaymentModule,
     ReviewModule,
+    AdminModule,
   ],
 })
 export class AppModule {}

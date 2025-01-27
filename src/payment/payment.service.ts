@@ -1,7 +1,9 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
@@ -22,7 +24,7 @@ export class PaymentService {
       });
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new ForbiddenException('Payment already exists');
+        throw new ConflictException('Payment already exists');
       }
       if (error.code === 'P2003') {
         throw new BadRequestException(
@@ -41,7 +43,7 @@ export class PaymentService {
         },
       });
       if (!payment) {
-        throw new ForbiddenException('Payment not found');
+        throw new NotFoundException('Payment not found');
       }
       return this.prisma.payment.update({
         where: {
@@ -53,7 +55,7 @@ export class PaymentService {
       });
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new BadRequestException('Payment already exists');
+        throw new ConflictException('Payment already exists');
       }
       if (error.code === 'P2003') {
         throw new BadRequestException(
