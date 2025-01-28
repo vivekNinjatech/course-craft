@@ -7,15 +7,19 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { AuthRole } from 'src/auth/type';
-import { JwtGuard } from 'src/auth/guard';
+import { AuthRole } from '../auth/type';
+import { JwtGuard } from '../auth/guard';
 import { RegisterAdminDto } from './dto/admin.dto';
+import { RoleGuard } from '../auth/role/role.guard';
+import { Roles } from '../auth/decorator';
 
 @Controller('admin')
+@UseGuards(JwtGuard, RoleGuard)
 export class AdminController {
   constructor(private adminService: AdminService) {}
 
-  @HttpCode(200)
+  @Roles(AuthRole.SUPERADMIN)
+  @HttpCode(201)
   @Post('register')
   @UseGuards(JwtGuard)
   async register(@Body() dto: RegisterAdminDto, @Req() req: any) {

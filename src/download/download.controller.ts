@@ -13,10 +13,10 @@ import {
   GetDownloadsByDataItemIdDto,
   GetDownloadsByUserDto,
 } from './dto';
-import { Roles } from 'src/auth/decorator';
-import { AuthRole } from 'src/auth/type';
-import { JwtGuard } from 'src/auth/guard';
-import { RoleGuard } from 'src/auth/role/role.guard';
+import { Roles } from '../auth/decorator';
+import { AuthRole } from '../auth/type';
+import { JwtGuard } from '../auth/guard';
+import { RoleGuard } from '../auth/role/role.guard';
 
 @UseGuards(JwtGuard, RoleGuard)
 @Controller('downloads')

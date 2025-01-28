@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import {
@@ -15,7 +16,10 @@ import {
   GetPaymentDto,
   UpdatePaymentStatusDto,
 } from './dto';
+import { JwtGuard } from '../auth/guard';
+import { RoleGuard } from '../auth/role/role.guard';
 
+@UseGuards(JwtGuard, RoleGuard)
 @Controller('payments')
 export class PaymentController {
   constructor(private paymentService: PaymentService) {}

@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import {
@@ -15,11 +16,17 @@ import {
   GetOrderDto,
   UpdateOrderStatusDto,
 } from './dto';
+import { JwtGuard } from '../auth/guard';
+import { RoleGuard } from '../auth/role/role.guard';
+import { Roles } from '../auth/decorator';
+import { AuthRole } from '../auth/type';
 
+@UseGuards(JwtGuard, RoleGuard)
 @Controller('orders')
 export class OrderController {
   constructor(private orderService: OrderService) {}
 
+  @Roles(AuthRole.ADMIN, AuthRole.SUPERADMIN)
   @HttpCode(200)
   @Get('')
   async getAllOrders() {

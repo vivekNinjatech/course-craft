@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateDownloadDto,
   GetDownloadsByDataItemIdDto,
@@ -85,17 +85,19 @@ export class DownloadService {
 
   async getDownloadCountsByDataItemId(dto: GetDownloadsByDataItemIdDto) {
     try {
-      const downloads = await this.prisma.download.findMany({
+      const aggregateResults = await this.prisma.download.aggregate({
+        _sum: {
+          downloadCount: true,
+        },
         where: {
           dataItemId: dto.dataItemId,
         },
       });
-      return downloads.map((download) => {
-        return {
-          dataItemId: dto.dataItemId,
-          downloadCount: download.downloadCount,
-        };
-      });
+
+      return {
+        dataItemId: dto.dataItemId,
+        downloadCount: aggregateResults._sum.downloadCount,
+      };
     } catch (error) {
       throw error;
     }

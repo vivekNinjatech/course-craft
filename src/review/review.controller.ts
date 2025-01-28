@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import {
@@ -18,11 +19,17 @@ import {
   GetReviewsByUserIdDto,
   UpdateReviewDto,
 } from './dto';
+import { JwtGuard } from '../auth/guard';
+import { RoleGuard } from '../auth/role/role.guard';
+import { Roles } from '../auth/decorator';
+import { AuthRole } from '../auth/type';
 
+@UseGuards(JwtGuard, RoleGuard)
 @Controller('reviews')
 export class ReviewController {
   constructor(private reviewService: ReviewService) {}
 
+  @Roles(AuthRole.ADMIN, AuthRole.SUPERADMIN)
   @HttpCode(200)
   @Get('')
   async getAllReviews() {
@@ -47,7 +54,7 @@ export class ReviewController {
     return this.reviewService.getReview(dto);
   }
 
-  @HttpCode(200)
+  @HttpCode(201)
   @Post('')
   async createReview(@Body() createReviewDto: CreateReviewDto) {
     return this.reviewService.createReview(createReviewDto);

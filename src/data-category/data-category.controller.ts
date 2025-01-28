@@ -17,13 +17,13 @@ import {
   GetDataCategoryDto,
   UpdateDataCategoryDto,
 } from './dto';
-import { JwtGuard } from 'src/auth/guard';
-import { Roles } from 'src/auth/decorator';
-import { AuthRole } from 'src/auth/type';
-import { RoleGuard } from 'src/auth/role/role.guard';
+import { JwtGuard } from '../auth/guard';
+import { Roles } from '../auth/decorator';
+import { AuthRole } from '../auth/type';
+import { RoleGuard } from '../auth/role/role.guard';
 
+@UseGuards(JwtGuard, RoleGuard)
 @Controller('data-categories')
-@UseGuards(JwtGuard, RoleGuard) // Applying guards at the controller level
 export class DataCategoryController {
   constructor(private readonly dataCategoryService: DataCategoryService) {}
 
@@ -37,14 +37,14 @@ export class DataCategoryController {
     return this.dataCategoryService.getDataCategoryById(dto);
   }
 
-  @Roles(AuthRole.ADMIN)
+  @Roles(AuthRole.ADMIN, AuthRole.SUPERADMIN)
   @Post('')
   @HttpCode(201)
   createDataCategory(@Body() dto: CreateDataCategoryDto) {
     return this.dataCategoryService.createDataCategory(dto);
   }
 
-  @Roles(AuthRole.ADMIN)
+  @Roles(AuthRole.ADMIN, AuthRole.SUPERADMIN)
   @Put(':id')
   @HttpCode(200)
   updateDataCategory(
@@ -54,7 +54,7 @@ export class DataCategoryController {
     return this.dataCategoryService.updateDataCategory({ id, ...dto });
   }
 
-  @Roles(AuthRole.ADMIN)
+  @Roles(AuthRole.ADMIN, AuthRole.SUPERADMIN)
   @Delete(':id')
   @HttpCode(200)
   deleteDataCategory(@Param() dto: DeleteDataCategoryDto) {

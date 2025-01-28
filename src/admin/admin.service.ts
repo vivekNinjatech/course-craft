@@ -1,8 +1,8 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { RegisterAdminDto } from './dto';
-import { AuthRole } from 'src/auth/type';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { AuthRole } from '../auth/type';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AdminService {

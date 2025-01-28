@@ -22,6 +22,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         id: payload.sub,
       },
     });
-    return user || null; // Ensure user is returned or null if not found
+    return user || null;
   }
 }

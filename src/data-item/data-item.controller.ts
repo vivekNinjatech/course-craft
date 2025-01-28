@@ -18,10 +18,10 @@ import {
   GetDataItemsByDto,
   UpdateDataItemDto,
 } from './dto';
-import { JwtGuard } from 'src/auth/guard';
-import { RoleGuard } from 'src/auth/role/role.guard';
-import { Roles } from 'src/auth/decorator';
-import { AuthRole } from 'src/auth/type';
+import { JwtGuard } from '../auth/guard';
+import { RoleGuard } from '../auth/role/role.guard';
+import { Roles } from '../auth/decorator';
+import { AuthRole } from '../auth/type';
 
 @UseGuards(JwtGuard, RoleGuard)
 @Controller('data-items')
@@ -46,14 +46,14 @@ export class DataItemController {
     return this.dataItemService.getDataItemsByQuery(dto);
   }
 
-  @Roles(AuthRole.ADMIN)
+  @Roles(AuthRole.ADMIN, AuthRole.SUPERADMIN)
   @HttpCode(201)
   @Post('')
   async createDataItem(@Body() dto: CreateDataItemDto) {
     return this.dataItemService.createDataItem(dto);
   }
 
-  @Roles(AuthRole.ADMIN)
+  @Roles(AuthRole.ADMIN, AuthRole.SUPERADMIN)
   @HttpCode(200)
   @Put(':id')
   async updateDataItem(
@@ -66,7 +66,7 @@ export class DataItemController {
     });
   }
 
-  @Roles(AuthRole.ADMIN)
+  @Roles(AuthRole.ADMIN, AuthRole.SUPERADMIN)
   @HttpCode(200)
   @Delete(':id')
   async deleteDataItem(@Param() dto: DeleteDataItemDto) {

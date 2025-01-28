@@ -9,14 +9,17 @@ import {
 } from '@nestjs/common';
 import { JwtGuard } from '../auth/guard';
 import { UserService } from './user.service';
-import { GetUser } from '../auth/decorator';
+import { GetUser, Roles } from '../auth/decorator';
 import { UpdateUserDataDto } from './dto';
+import { AuthRole } from '../auth/type';
+import { RoleGuard } from '../auth/role/role.guard';
 
-@UseGuards(JwtGuard)
+@UseGuards(JwtGuard, RoleGuard)
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @Roles(AuthRole.ADMIN, AuthRole.SUPERADMIN)
   @HttpCode(200)
   @Get('')
   async getAllUsers() {

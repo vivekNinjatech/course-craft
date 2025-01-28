@@ -1,5 +1,5 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { AuthRole } from 'src/auth/type';
+import { AuthRole } from '../../auth/type';
 
 export class RegisterAdminDto {
   @IsEmail()
